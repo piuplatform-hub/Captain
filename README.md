@@ -63,6 +63,29 @@ Nếu bạn đã clone thư mục `dotfiles` về máy:
 
 ---
 
+## 🗑️ HƯỚNG DẪN GỠ CÀI ĐẶT (UNINSTALL)
+
+Khi muốn dọn dẹp hoặc gỡ bỏ môi trường:
+
+### Cách 1: Gỡ bằng 1 dòng lệnh trực tiếp từ GitHub:
+```powershell
+irm https://raw.githubusercontent.com/piuplatform-hub/Captain/main/uninstall.ps1 | iex
+```
+
+### Cách 2: Gỡ nếu đang ở thư mục dotfiles:
+```powershell
+.\uninstall.bat
+# Hoặc:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force; .\uninstall.ps1
+```
+
+Script sẽ hiển thị 3 lựa chọn an toàn:
+- `[1]` Chỉ xóa cấu hình (WezTerm, Neovim) và tự động khôi phục cấu hình cũ nếu có sao lưu.
+- `[2]` Gỡ sạch cả phần mềm cốt lõi (WezTerm, Neovim, Ripgrep, Fd) và xóa cấu hình.
+- `[3]` Gỡ toàn bộ bao gồm cả các công cụ AI (Codex, CloudCode, OpenCode, Antigravity).
+
+---
+
 ## 🔑 Hướng dẫn đăng nhập các công cụ AI sau khi cài đặt
 
 Sau khi script hoàn tất, bạn chỉ cần chạy lệnh đăng nhập một lần:
