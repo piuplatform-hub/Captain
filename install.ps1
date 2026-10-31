@@ -3,6 +3,7 @@
     Script tự động thiết lập môi trường lập trình: WezTerm, Neovim (LazyVim), WSL & Tmux, kèm tùy chọn AI Coding Tools.
 .DESCRIPTION
     Tự động cài đặt qua Winget, cấu hình WezTerm, Neovim, WSL/Tmux và bộ công cụ AI (Antigravity, Codex, CloudCode, OpenCode).
+    Hỗ trợ chạy trực tiếp 1 dòng lệnh từ GitHub (One-liner).
 .PARAMETER InstallWSL
     Tự động cài đặt WSL mà không cần hỏi xác nhận.
 .PARAMETER SkipWSL
@@ -27,7 +28,42 @@ Write-Host " BẮT ĐẦU CÀI ĐẶT & THIẾT LẬP MÔI TRƯỜNG LẬP TRÌN
 Write-Host " (WezTerm + Neovim LazyVim + WSL + Tmux + AI Tools)" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Cyan
 
-$DotfilesDir = $PSScriptRoot
+# ---------------------------------------------------------------------
+# TỰ ĐỘNG PHÁT HIỆN KHI CHẠY TRỰC TIẾP TỪ GITHUB (ONE-LINER)
+# ---------------------------------------------------------------------
+if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "wezterm\.wezterm.lua"))) {
+    $DotfilesDir = $PSScriptRoot
+} else {
+    $DotfilesDir = Join-Path $HOME "dotfiles"
+    if (-not (Test-Path (Join-Path $DotfilesDir "wezterm\.wezterm.lua"))) {
+        Write-Host "`n[Phát hiện chạy trực tiếp từ GitHub]" -ForegroundColor Cyan
+        Write-Host "Đang chuẩn bị thư mục dotfiles tại: $DotfilesDir..." -ForegroundColor Yellow
+
+        # 1. Đảm bảo có Git
+        if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+            Write-Host "Máy chưa có Git. Đang cài Git tự động qua Winget..." -ForegroundColor Cyan
+            winget install --id Git.Git --silent --accept-package-agreements --accept-source-agreements
+            $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+        }
+
+        # 2. Clone hoặc tải ZIP từ GitHub
+        Write-Host "Đang tải repo Captain về máy của bạn..." -ForegroundColor Cyan
+        try {
+            git clone https://github.com/piuplatform-hub/Captain.git $DotfilesDir
+        } catch {
+            Write-Host "Clone qua Git không thành công, chuyển sang tải ZIP trực tiếp..." -ForegroundColor Yellow
+            $zipPath = "$HOME\captain.zip"
+            Invoke-WebRequest -Uri "https://github.com/piuplatform-hub/Captain/archive/refs/heads/main.zip" -OutFile $zipPath -UseBasicParsing
+            Expand-Archive -Path $zipPath -DestinationPath "$HOME\captain_temp" -Force
+            if (Test-Path $DotfilesDir) { Remove-Item -Path $DotfilesDir -Recurse -Force -ErrorAction SilentlyContinue }
+            Move-Item -Path "$HOME\captain_temp\Captain-main" -Destination $DotfilesDir -Force
+            Remove-Item -Path $zipPath, "$HOME\captain_temp" -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    } else {
+        Write-Host "`nĐã tìm thấy repo tại $DotfilesDir, đang đồng bộ phiên bản mới nhất..." -ForegroundColor Cyan
+        git -C $DotfilesDir pull origin main 2>$null
+    }
+}
 
 # ---------------------------------------------------------------------
 # 1. CÔNG CỤ CỐT LÕI (CORE TOOLS) TRÊN WINDOWS QUA WINGET
@@ -130,7 +166,7 @@ if (-not $hasWSL) {
 
         Write-Host "`n[! LƯU Ý QUAN TRỌNG VỀ WSL !]" -ForegroundColor Yellow
         Write-Host "Lần đầu cài WSL, Windows sẽ cần bạn KHỞI ĐỘNG LẠI MÁY (Restart)." -ForegroundColor Yellow
-        Write-Host "Sau khi khởi động lại, chạy lại lệnh: .\install.ps1 để hoàn tất Tmux." -ForegroundColor Cyan
+        Write-Host "Sau khi khởi động lại, chỉ cần chạy lại lệnh cài đặt để hoàn tất Tmux." -ForegroundColor Cyan
     } else {
         Write-Host " -> Bỏ qua WSL. WezTerm và Neovim vẫn hoạt động bình thường trên Windows!" -ForegroundColor Green
     }
@@ -236,7 +272,7 @@ if ($shouldInstallAI) {
     Write-Host " - OpenAI Codex: Chạy 'codex login' để xác thực tài khoản OpenAI." -ForegroundColor Cyan
     Write-Host " - Google Cloud Code: Chạy 'gcloud auth login' để đăng nhập." -ForegroundColor Cyan
 } else {
-    Write-Host " -> Đã bỏ qua cài đặt công cụ AI. Bạn có thể chạy '.\install.ps1 -WithAI' bất cứ lúc nào." -ForegroundColor Green
+    Write-Host " -> Đã bỏ qua cài đặt công cụ AI." -ForegroundColor Green
 }
 
 Write-Host "`n==========================================================" -ForegroundColor Cyan

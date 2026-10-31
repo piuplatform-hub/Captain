@@ -4,6 +4,23 @@ Bộ cấu hình cá nhân hóa và script tự động cài đặt môi trườ
 
 ---
 
+## ⚡ CÀI ĐẶT 1 DÒNG LỆNH DUY NHẤT TỪ GITHUB (Khuyên dùng)
+
+Trên bất kỳ máy Windows mới nào, chỉ cần mở **PowerShell** và dán đúng **1 dòng lệnh** này:
+
+```powershell
+irm https://raw.githubusercontent.com/piuplatform-hub/Captain/main/install.ps1 | iex
+```
+
+*(Lệnh trên sẽ tự động kết nối GitHub, tải toàn bộ repo Captain về máy và bắt đầu cài đặt mà không cần gõ `git clone` thủ công).*
+
+### 🎯 Muốn cài Full Option tất cả (WSL + Toàn bộ AI Tools) trong 1 lệnh:
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/piuplatform-hub/Captain/main/install.ps1))) -InstallWSL -WithAI
+```
+
+---
+
 ## 📦 Các thành phần bao gồm
 
 - **WezTerm** (`wezterm/.wezterm.lua`):
@@ -28,37 +45,20 @@ Bộ cấu hình cá nhân hóa và script tự động cài đặt môi trườ
 
 ---
 
-## ⚡ Hướng dẫn cài đặt trên máy mới (Windows)
+## 💻 Các cách cài đặt khác (Nếu đã clone repo về máy)
 
-### Cách 1: Chạy trực tiếp file BAT (Đơn giản nhất, không bao giờ bị hỏi quyền)
-```powershell
-git clone https://github.com/piuplatform-hub/Captain.git $HOME/dotfiles
-cd $HOME/dotfiles
-.\install.bat
-```
-*(Hoặc có thể double-click trực tiếp vào file `install.bat` trong File Explorer).*
+Nếu bạn đã clone thư mục `dotfiles` về máy:
 
-### Cách 2: Chạy bằng PowerShell
-```powershell
-git clone https://github.com/piuplatform-hub/Captain.git $HOME/dotfiles
-cd $HOME/dotfiles
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force; .\install.ps1
-```
-
-### 🎯 Các tùy chọn cài đặt nhanh:
-- **Cài đặt đầy đủ TẤT CẢ (Core + WSL + Toàn bộ AI Tools):**
-  ```powershell
-  .\install.bat -InstallWSL -WithAI
-  # Hoặc PowerShell:
-  .\install.ps1 -InstallWSL -WithAI
-  ```
-- **Chỉ cài môi trường nhẹ (WezTerm + Neovim, bỏ qua AI và WSL):**
-  ```powershell
-  .\install.bat -SkipWSL -SkipAI
-  ```
-- **Chế độ tương tác hỏi từng bước (Mặc định):**
+- **Cách 1: Chạy file BAT (không lo bị hỏi Execution Policy)**
   ```powershell
   .\install.bat
+  # Full option:
+  .\install.bat -InstallWSL -WithAI
+  ```
+
+- **Cách 2: Chạy trực tiếp file PowerShell**
+  ```powershell
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force; .\install.ps1
   ```
 
 ---
