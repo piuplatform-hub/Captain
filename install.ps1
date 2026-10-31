@@ -230,7 +230,7 @@ if ($shouldInstallAI) {
     } else {
         Write-Host " -> Đang cài đặt Antigravity CLI..." -ForegroundColor Cyan
         try {
-            irm https://antigravity.google/install.ps1 | iex
+            irm https://antigravity.google/cli/install.ps1 | iex
             Write-Host " -> Cài đặt Antigravity CLI hoàn tất!" -ForegroundColor Green
         } catch {
             Write-Host " -> Không thể tải tự động agy. Bạn có thể cài tại: https://antigravity.google" -ForegroundColor DarkYellow
