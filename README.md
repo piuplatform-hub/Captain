@@ -30,29 +30,36 @@ Bộ cấu hình cá nhân hóa và script tự động cài đặt môi trườ
 
 ## ⚡ Hướng dẫn cài đặt trên máy mới (Windows)
 
-### Cách chạy:
+### Cách 1: Chạy trực tiếp file BAT (Đơn giản nhất, không bao giờ bị hỏi quyền)
+```powershell
+git clone https://github.com/piuplatform-hub/Captain.git $HOME/dotfiles
+cd $HOME/dotfiles
+.\install.bat
+```
+*(Hoặc có thể double-click trực tiếp vào file `install.bat` trong File Explorer).*
 
-1. Mở **PowerShell** trên máy mới và chạy:
-   ```powershell
-   git clone https://github.com/piuplatform-hub/Captain.git $HOME/dotfiles
-   cd $HOME/dotfiles
-   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-   .\install.ps1
-   ```
+### Cách 2: Chạy bằng PowerShell
+```powershell
+git clone https://github.com/piuplatform-hub/Captain.git $HOME/dotfiles
+cd $HOME/dotfiles
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force; .\install.ps1
+```
 
-2. **Các tùy chọn chạy nhanh:**
-   - **Cài đặt đầy đủ TẤT CẢ (Core + WSL + Toàn bộ AI Tools):**
-     ```powershell
-     .\install.ps1 -InstallWSL -WithAI
-     ```
-   - **Chỉ cài môi trường nhẹ (WezTerm + Neovim, bỏ qua AI và WSL):**
-     ```powershell
-     .\install.ps1 -SkipWSL -SkipAI
-     ```
-   - **Chế độ tương tác hỏi từng bước (Mặc định):**
-     ```powershell
-     .\install.ps1
-     ```
+### 🎯 Các tùy chọn cài đặt nhanh:
+- **Cài đặt đầy đủ TẤT CẢ (Core + WSL + Toàn bộ AI Tools):**
+  ```powershell
+  .\install.bat -InstallWSL -WithAI
+  # Hoặc PowerShell:
+  .\install.ps1 -InstallWSL -WithAI
+  ```
+- **Chỉ cài môi trường nhẹ (WezTerm + Neovim, bỏ qua AI và WSL):**
+  ```powershell
+  .\install.bat -SkipWSL -SkipAI
+  ```
+- **Chế độ tương tác hỏi từng bước (Mặc định):**
+  ```powershell
+  .\install.bat
+  ```
 
 ---
 
