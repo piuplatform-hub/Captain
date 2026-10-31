@@ -42,7 +42,7 @@ if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "wezterm\.wezterm.lua
         # 1. Đảm bảo có Git
         if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
             Write-Host "Máy chưa có Git. Đang cài Git tự động qua Winget..." -ForegroundColor Cyan
-            winget install --id Git.Git --silent --accept-package-agreements --accept-source-agreements
+            winget install --id Git.Git --source winget --silent --accept-package-agreements --accept-source-agreements
             $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
         }
 
@@ -79,12 +79,12 @@ $packages = @(
 Write-Host "`n[1/5] Kiểm tra và cài đặt công cụ cốt lõi qua Winget..." -ForegroundColor Yellow
 foreach ($pkg in $packages) {
     Write-Host "Kiểm tra $($pkg.Name)... " -NoNewline
-    $check = winget list --id $pkg.Id --exact 2>$null
+    $check = winget list --id $pkg.Id --source winget --exact 2>$null
     if ($LASTEXITCODE -eq 0 -and ($check -match [regex]::Escape($pkg.Id))) {
         Write-Host "[ĐÃ CÀI ĐẶT]" -ForegroundColor Green
     } else {
         Write-Host "[ĐANG CÀI ĐẶT...]" -ForegroundColor Cyan
-        winget install --id $pkg.Id --silent --accept-package-agreements --accept-source-agreements
+        winget install --id $pkg.Id --source winget --silent --accept-package-agreements --accept-source-agreements
         if ($LASTEXITCODE -eq 0) {
             Write-Host " -> Cài đặt thành công $($pkg.Name)!" -ForegroundColor Green
         } else {
@@ -221,7 +221,7 @@ if ($shouldInstallAI) {
     # 5.1. Runtime cần thiết: Node.js
     if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
         Write-Host " -> Đang cài đặt Node.js LTS (nền tảng cho nhiều CLI AI)..." -ForegroundColor Cyan
-        winget install --id OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements
+        winget install --id OpenJS.NodeJS.LTS --source winget --silent --accept-package-agreements --accept-source-agreements
     }
 
     # 5.2. Antigravity CLI (agy)
@@ -242,7 +242,7 @@ if ($shouldInstallAI) {
         Write-Host " -> OpenAI Codex CLI: [ĐÃ CÀI ĐẶT]" -ForegroundColor Green
     } else {
         Write-Host " -> Đang cài đặt OpenAI Codex..." -ForegroundColor Cyan
-        winget install --id OpenAI.Codex --silent --accept-package-agreements --accept-source-agreements
+        winget install --id OpenAI.Codex --source winget --silent --accept-package-agreements --accept-source-agreements
         if ($LASTEXITCODE -ne 0) {
             npm install -g @openai/codex 2>$null
         }
@@ -253,7 +253,7 @@ if ($shouldInstallAI) {
         Write-Host " -> Google Cloud Code / SDK: [ĐÃ CÀI ĐẶT]" -ForegroundColor Green
     } else {
         Write-Host " -> Đang cài đặt Google Cloud SDK (Cloud Code)..." -ForegroundColor Cyan
-        winget install --id Google.CloudSDK --silent --accept-package-agreements --accept-source-agreements
+        winget install --id Google.CloudSDK --source winget --silent --accept-package-agreements --accept-source-agreements
     }
 
     # 5.5. OpenCode CLI
