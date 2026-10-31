@@ -2,14 +2,14 @@
 .SYNOPSIS
     Script tự động thiết lập môi trường lập trình: WezTerm, Neovim (LazyVim), WSL & Tmux, kèm tùy chọn AI Coding Tools.
 .DESCRIPTION
-    Tự động cài đặt qua Winget, cấu hình WezTerm, Neovim, WSL/Tmux và bộ công cụ AI (Antigravity, Codex, CloudCode, OpenCode).
+    Tự động cài đặt qua Winget, cấu hình WezTerm, Neovim, WSL/Tmux và bộ công cụ AI (Antigravity, Claude Code, Codex, CloudCode, OpenCode).
     Hỗ trợ chạy trực tiếp 1 dòng lệnh từ GitHub (One-liner).
 .PARAMETER InstallWSL
     Tự động cài đặt WSL mà không cần hỏi xác nhận.
 .PARAMETER SkipWSL
     Bỏ qua bước kiểm tra và cài đặt WSL.
 .PARAMETER WithAI
-    Tự động cài đặt toàn bộ công cụ AI Coding (Antigravity, Codex, CloudCode, OpenCode).
+    Tự động cài đặt toàn bộ công cụ AI Coding (Antigravity, Claude Code, Codex, CloudCode, OpenCode).
 .PARAMETER SkipAI
     Bỏ qua bước cài đặt công cụ AI.
 #>
@@ -198,9 +198,9 @@ if (-not $hasWSL) {
 
 # ---------------------------------------------------------------------
 # 5. TÙY CHỌN: BỘ CÔNG CỤ AI CODING ASSISTANTS
-# (Antigravity, OpenAI Codex, Cloud Code, OpenCode)
+# (Antigravity, Claude Code, OpenAI Codex, Cloud Code, OpenCode)
 # ---------------------------------------------------------------------
-Write-Host "`n[5/5] Kiểm tra bộ công cụ AI Coding (Antigravity, Codex, CloudCode, OpenCode)..." -ForegroundColor Yellow
+Write-Host "`n[5/5] Kiểm tra bộ công cụ AI Coding (Antigravity, Claude Code, Codex, CloudCode, OpenCode)..." -ForegroundColor Yellow
 
 $shouldInstallAI = $false
 if ($SkipAI) {
@@ -208,7 +208,7 @@ if ($SkipAI) {
 } elseif ($WithAI) {
     $shouldInstallAI = $true
 } else {
-    Write-Host "`n[?] Bạn có muốn cài đặt thêm bộ công cụ AI Coding (Antigravity, Codex, CloudCode, OpenCode) không? (Y/N): " -ForegroundColor Cyan -NoNewline
+    Write-Host "`n[?] Bạn có muốn cài đặt thêm bộ công cụ AI Coding (Antigravity, Claude Code, Codex, CloudCode, OpenCode) không? (Y/N): " -ForegroundColor Cyan -NoNewline
     $respAI = Read-Host
     if ($respAI -match "^[yY]") {
         $shouldInstallAI = $true
@@ -237,7 +237,20 @@ if ($shouldInstallAI) {
         }
     }
 
-    # 5.3. OpenAI Codex CLI
+    # 5.3. Claude Code CLI (Anthropic)
+    if (Get-Command claude.cmd, claude.exe, claude -ErrorAction SilentlyContinue) {
+        Write-Host " -> Claude Code CLI: [ĐÃ CÀI ĐẶT]" -ForegroundColor Green
+    } else {
+        Write-Host " -> Đang cài đặt Claude Code CLI (@anthropic-ai/claude-code)..." -ForegroundColor Cyan
+        npm install -g @anthropic-ai/claude-code
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host " -> Cài đặt Claude Code CLI hoàn tất!" -ForegroundColor Green
+        } else {
+            Write-Host " -> Không thể cài tự động Claude Code qua npm." -ForegroundColor DarkYellow
+        }
+    }
+
+    # 5.4. OpenAI Codex CLI
     if (Get-Command codex.exe -ErrorAction SilentlyContinue) {
         Write-Host " -> OpenAI Codex CLI: [ĐÃ CÀI ĐẶT]" -ForegroundColor Green
     } else {
@@ -248,7 +261,7 @@ if ($shouldInstallAI) {
         }
     }
 
-    # 5.4. Google Cloud Code / Cloud SDK
+    # 5.5. Google Cloud Code / Cloud SDK
     if (Get-Command gcloud.cmd, gcloud.exe -ErrorAction SilentlyContinue) {
         Write-Host " -> Google Cloud Code / SDK: [ĐÃ CÀI ĐẶT]" -ForegroundColor Green
     } else {
@@ -256,7 +269,7 @@ if ($shouldInstallAI) {
         winget install --id Google.CloudSDK --source winget --silent --accept-package-agreements --accept-source-agreements
     }
 
-    # 5.5. OpenCode CLI
+    # 5.6. OpenCode CLI
     if (Get-Command opencode -ErrorAction SilentlyContinue) {
         Write-Host " -> OpenCode: [ĐÃ CÀI ĐẶT]" -ForegroundColor Green
     } else {
@@ -269,6 +282,7 @@ if ($shouldInstallAI) {
 
     Write-Host "`n[💡 HƯỚNG DẪN XÁC THỰC TÀI KHOẢN SAU KHI CÀI ĐẶT]" -ForegroundColor Yellow
     Write-Host " - Antigravity: Chạy 'agy' để đăng nhập tài khoản Google AI Pro." -ForegroundColor Cyan
+    Write-Host " - Claude Code: Chạy 'claude' để đăng nhập tài khoản Anthropic." -ForegroundColor Cyan
     Write-Host " - OpenAI Codex: Chạy 'codex login' để xác thực tài khoản OpenAI." -ForegroundColor Cyan
     Write-Host " - Google Cloud Code: Chạy 'gcloud auth login' để đăng nhập." -ForegroundColor Cyan
 } else {
