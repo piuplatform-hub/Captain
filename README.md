@@ -1,6 +1,6 @@
-# 🚀 Dotfiles: WezTerm + Neovim (LazyVim) + WSL & Tmux (Captain)
+# 🚀 Dotfiles: WezTerm + Neovim (LazyVim) + WSL & Tmux + AI Coding (Captain)
 
-Bộ cấu hình cá nhân hóa và script tự động cài đặt môi trường lập trình từ A-Z cho máy mới.
+Bộ cấu hình cá nhân hóa và script tự động cài đặt môi trường lập trình từ A-Z cho máy mới, tích hợp bộ công cụ trợ lý AI (Antigravity, OpenAI Codex, Cloud Code, OpenCode).
 
 ---
 
@@ -17,8 +17,14 @@ Bộ cấu hình cá nhân hóa và script tự động cài đặt môi trườ
   - Tự động phát hiện nếu máy mới chưa có WSL -> Tự động cài đặt WSL & Ubuntu.
   - Tự động cài đặt Tmux và đồng bộ cả `.tmux.conf` lẫn cấu hình Neovim vào WSL.
   - Bật chuột (`mouse on`), hỗ trợ TrueColor 256 colors, phím chia ô trực quan và phím điều hướng `h, j, k, l`.
+- **Bộ công cụ AI Coding Assistants (Tùy chọn)**:
+  - **Antigravity CLI (`agy`)**: Trợ lý AI phát triển phần mềm trong terminal.
+  - **OpenAI Codex CLI (`codex`)**: Agent AI sinh và chỉnh sửa code tự động.
+  - **Google Cloud Code**: Bộ công cụ Google Cloud SDK và Gemini Assist.
+  - **OpenCode**: CLI thực thi mã nguồn và phân tích tác vụ AI.
 - **Công cụ bổ trợ CLI**:
   - `ripgrep` và `fd` để Neovim tìm kiếm file và text cực nhanh.
+  - `Node.js LTS` làm nền tảng runtime cho các CLI AI hiện đại.
 
 ---
 
@@ -34,30 +40,39 @@ Bộ cấu hình cá nhân hóa và script tự động cài đặt môi trườ
    .\install.ps1
    ```
 
-2. **Cơ chế tự động của script:**
-   - Cài đặt Git, WezTerm, Neovim, ripgrep, fd qua Winget.
-   - Copy file `.wezterm.lua` và cấu hình Neovim trên Windows.
-   - **Tự động kiểm tra WSL**:
-     - Nếu máy **chưa có WSL**: Script sẽ hỏi bạn có muốn cài WSL (Ubuntu) không. Nếu chọn `Y`, script tự động gọi quyền Admin (UAC) để chạy `wsl --install -d Ubuntu`.
-     - *(Lưu ý: Lần đầu cài WSL, Windows sẽ cần bạn khởi động lại máy để kích hoạt ảo hóa. Sau khi khởi động lại, chỉ cần chạy lại `.\install.ps1` là hoàn tất).*
-     - Nếu máy **đã có WSL**: Script tự động cài `tmux` trong Ubuntu, nạp file `.tmux.conf` và đồng bộ cả LazyVim sang WSL.
+2. **Các tùy chọn chạy nhanh:**
+   - **Cài đặt đầy đủ TẤT CẢ (Core + WSL + Toàn bộ AI Tools):**
+     ```powershell
+     .\install.ps1 -InstallWSL -WithAI
+     ```
+   - **Chỉ cài môi trường nhẹ (WezTerm + Neovim, bỏ qua AI và WSL):**
+     ```powershell
+     .\install.ps1 -SkipWSL -SkipAI
+     ```
+   - **Chế độ tương tác hỏi từng bước (Mặc định):**
+     ```powershell
+     .\install.ps1
+     ```
 
-> [!TIP]
-> **Tham số chạy nhanh:**
-> - Tự động cài luôn WSL không cần hỏi: `.\install.ps1 -InstallWSL`
-> - Bỏ qua WSL (chỉ cài WezTerm + Neovim cho Windows): `.\install.ps1 -SkipWSL`
+---
+
+## 🔑 Hướng dẫn đăng nhập các công cụ AI sau khi cài đặt
+
+Sau khi script hoàn tất, bạn chỉ cần chạy lệnh đăng nhập một lần:
+- **Antigravity:** Gõ `agy` trong terminal và đăng nhập tài khoản Google AI Pro.
+- **OpenAI Codex:** Gõ `codex login` để liên kết tài khoản OpenAI.
+- **Google Cloud Code:** Gõ `gcloud auth login` để đăng nhập.
 
 ---
 
 ## 🐧 Hướng dẫn cài đặt trên Linux / WSL / macOS
 
-1. Mở Terminal:
-   ```bash
-   git clone https://github.com/piuplatform-hub/Captain.git ~/dotfiles
-   cd ~/dotfiles
-   chmod +x install.sh
-   ./install.sh
-   ```
+```bash
+git clone https://github.com/piuplatform-hub/Captain.git ~/dotfiles
+cd ~/dotfiles
+chmod +x install.sh
+./install.sh
+```
 
 ---
 
