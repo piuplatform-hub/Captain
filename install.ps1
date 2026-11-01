@@ -73,7 +73,8 @@ $packages = @(
     @{ Name = "WezTerm"; Id = "wez.wezterm" },
     @{ Name = "Neovim"; Id = "Neovim.Neovim" },
     @{ Name = "Ripgrep (Fast code search for Neovim)"; Id = "BurntSushi.ripgrep.MSVC" },
-    @{ Name = "Fd (Fast file search for Neovim)"; Id = "sharkdp.fd" }
+    @{ Name = "Fd (Fast file search for Neovim)"; Id = "sharkdp.fd" },
+    @{ Name = "C Compiler (WinLibs GCC/Clang for Treesitter syntax)"; Id = "BrechtSanders.WinLibs.POSIX.UCRT" }
 )
 
 Write-Host "`n[1/5] Checking core tools via Winget..." -ForegroundColor Yellow
@@ -92,6 +93,9 @@ foreach ($pkg in $packages) {
         }
     }
 }
+
+# Refresh PATH for current session
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
 # ---------------------------------------------------------------------
 # 2. WEZTERM CONFIGURATION
